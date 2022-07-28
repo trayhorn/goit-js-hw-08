@@ -64,4 +64,35 @@ const galleryItems = [
   },
 ];
 
+const gallery = document.querySelector('.js-gallery');
+const modal = document.querySelector('.js-lightbox');
+const button = document.querySelector('[data-action="close-lightbox"]');
+const image = document.querySelector('.lightbox__image');
+
+
+button.addEventListener('click', closeModalOnClick);
+gallery.addEventListener('click', openModalOnClick);
+
+const markup = galleryItems.map((item) =>
+  `<li><img width="392px" height="240px" data-src="${item.original}"src="${item.preview}" alt="${item.description}"></li>`).join('');
+
+gallery.innerHTML += markup;
+
+
+
+function openModalOnClick(event) {
+  if (event.target.nodeName !== 'IMG') {
+    return;
+  }
+  modal.classList.add('is-open');
+
+  console.log(event.target.dataset.src)
+
+  image.setAttribute('src', event.target.dataset.src);
+}
+
+function closeModalOnClick() {
+  modal.classList.remove('is-open');
+}
+
 
