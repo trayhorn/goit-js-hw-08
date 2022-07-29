@@ -64,35 +64,81 @@ const galleryItems = [
   },
 ];
 
+
+// const markup = galleryItems.map(({ preview, original, description }) =>
+//   `<li class="gallery__item">
+//         <a
+//             class="gallery__link"
+//             href="${original}"
+//         >
+//             <img
+//                 class="gallery__image"
+//                 src="${preview}"
+//                 data-source="${original}"
+//                 alt="${description}"
+//             />
+//         </a>
+//     </li>`).join('');
+
+function createHtml(items) {
+  return items.map(({ preview, original, description }) => {
+      return `<li class="gallery__item">
+        <a 
+            class="gallery__link"
+            href="${original}"
+        >
+            <img
+                class="gallery__image"
+                src="${preview}"
+                data-source="${original}"
+                alt="${description}"
+            />
+        </a>
+    </li>`;
+    })
+    .join("");
+}
+
 const gallery = document.querySelector('.js-gallery');
+const galleryMarkup = createHtml(galleryItems);
+gallery.insertAdjacentHTML('beforeend', galleryItems);
+
+const bodyEl = document.body;
 const modal = document.querySelector('.js-lightbox');
-const button = document.querySelector('[data-action="close-lightbox"]');
 const image = document.querySelector('.lightbox__image');
 
 
-button.addEventListener('click', closeModalOnClick);
+
 gallery.addEventListener('click', openModalOnClick);
-
-const markup = galleryItems.map((item) =>
-  `<li><img width="392px" height="240px" data-src="${item.original}"src="${item.preview}" alt="${item.description}"></li>`).join('');
-
-gallery.innerHTML += markup;
+bodyEl.addEventListener('click', closeModalOnClick);
 
 
-
-function openModalOnClick(event) {
-  if (event.target.nodeName !== 'IMG') {
+function openModalOnClick(e) {
+  if (!e.target.classList.contains('gallery__image')) {
     return;
   }
   modal.classList.add('is-open');
 
-  console.log(event.target.dataset.src)
-
-  image.setAttribute('src', event.target.dataset.src);
+  importOriginalImage(e);
+  e.preventDefault();
 }
 
-function closeModalOnClick() {
+function closeModalOnClick(e) {
+  if (!e.target.classList.contains('lightbox__button')) {
+    return;
+  }
   modal.classList.remove('is-open');
+  clearSourceOnClose();
 }
 
+function importOriginalImage(e) {
+  const newImage = e.target;
+  image.setAttribute('src', newImage.dataset.source);
+  image.setAttribute('alt', newImage.alt)
+}
+
+function clearSourceOnClose() {
+  image.setAttribute('src', '');
+  image.setAttribute('alt', '')
+}
 
