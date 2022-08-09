@@ -24,6 +24,9 @@ body {
   background-color: #fff;
   color: #212121;
 }
+body.is-hidden {
+  overflow-y: hidden;
+}
 
 .gallery {
   display: grid;

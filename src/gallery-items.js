@@ -1,4 +1,4 @@
-const galleryItems = [
+export default [
   {
     preview:
       'https://cdn.pixabay.com/photo/2019/05/14/16/43/himilayan-blue-poppy-4202825__340.jpg',
@@ -63,82 +63,3 @@ const galleryItems = [
     description: 'Lighthouse Coast Sea',
   },
 ];
-
-
-// const markup = galleryItems.map(({ preview, original, description }) =>
-//   `<li class="gallery__item">
-//         <a
-//             class="gallery__link"
-//             href="${original}"
-//         >
-//             <img
-//                 class="gallery__image"
-//                 src="${preview}"
-//                 data-source="${original}"
-//                 alt="${description}"
-//             />
-//         </a>
-//     </li>`).join('');
-
-function createHtml(items) {
-  return items.map(({ preview, original, description }) => {
-      return `<li class="gallery__item">
-        <a 
-            class="gallery__link"
-            href="${original}"
-        >
-            <img
-                class="gallery__image"
-                src="${preview}"
-                data-source="${original}"
-                alt="${description}"
-            />
-        </a>
-    </li>`;
-    })
-    .join("");
-}
-
-const gallery = document.querySelector('.js-gallery');
-const galleryMarkup = createHtml(galleryItems);
-gallery.insertAdjacentHTML('beforeend', galleryItems);
-
-const bodyEl = document.body;
-const modal = document.querySelector('.js-lightbox');
-const image = document.querySelector('.lightbox__image');
-
-
-
-gallery.addEventListener('click', openModalOnClick);
-bodyEl.addEventListener('click', closeModalOnClick);
-
-
-function openModalOnClick(e) {
-  if (!e.target.classList.contains('gallery__image')) {
-    return;
-  }
-  modal.classList.add('is-open');
-
-  importOriginalImage(e);
-  e.preventDefault();
-}
-
-function closeModalOnClick(e) {
-  if (!e.target.classList.contains('lightbox__button')) {
-    return;
-  }
-  modal.classList.remove('is-open');
-  clearSourceOnClose();
-}
-
-function importOriginalImage(e) {
-  const newImage = e.target;
-  image.setAttribute('src', newImage.dataset.source);
-  image.setAttribute('alt', newImage.alt)
-}
-
-function clearSourceOnClose() {
-  image.setAttribute('src', '');
-  image.setAttribute('alt', '')
-}
-
